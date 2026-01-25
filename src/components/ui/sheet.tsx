@@ -25,7 +25,7 @@ const Sheet = ({ open, onOpenChange, children }: SheetProps) => {
   return (
     <>
       <div
-        className="fixed inset-0 z-50 bg-black/80"
+        className="fixed inset-0 z-50 bg-black/10 animate-backdrop-in"
         onClick={() => onOpenChange(false)}
       />
       {children}
@@ -40,7 +40,7 @@ const SheetContent = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "fixed z-50 bg-background p-6 shadow-lg transition ease-in-out data-[state=open]:animate-in data-[state=closed]:animate-out inset-y-0 right-0 h-full w-full sm:max-w-sm border-l",
+      "fixed z-50 bg-background/95 backdrop-blur-md p-6 shadow-2xl transition ease-in-out data-[state=open]:animate-in data-[state=closed]:animate-out inset-y-0 right-0 h-full w-full sm:max-w-sm border-l",
       className
     )}
     {...props}

@@ -7,14 +7,16 @@ import { Footer } from '@/components/Footer';
 
 function App() {
   return (
-    <div className="min-h-screen">
-      <ThemeToggle />
-      <Hero />
-      <GitHubReadme />
-      <Projects />
-      <AvailabilitySection />
-      <Footer />
-    </div>
+    <>
+      <div id="main-content" className="min-h-screen">
+        <ThemeToggle />
+        <Hero />
+        <GitHubReadme />
+        <Projects />
+        <AvailabilitySection />
+        <Footer />
+      </div>
+    </>
   );
 }
 

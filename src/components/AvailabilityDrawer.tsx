@@ -129,6 +129,7 @@ export function AvailabilityDrawer({ open, onOpenChange }: AvailabilityDrawerPro
           setSelectedSlot(null);
           setFormData({ name: '', email: '', message: '' });
           setErrors({});
+          onOpenChange(false);
         }} />
         <SheetHeader>
           <SheetTitle>Schedule a Call</SheetTitle>
