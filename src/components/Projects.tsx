@@ -21,12 +21,45 @@ export function Projects() {
   const [repos, setRepos] = useState<Repo[]>([]);
   const [languages, setLanguages] = useState<{ [key: number]: LanguageData }>({});
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Replace with your GitHub username
-    fetch('https://api.github.com/users/viguime/repos?sort=updated&per_page=3')
-      .then(res => res.json())
-      .then(async (data: Repo[]) => {
+    const fetchRepos = async () => {
+      try {
+        // Check cache first
+        const cacheKey = 'github_repos_cache';
+        const cacheTimeKey = 'github_repos_cache_time';
+        const cachedData = localStorage.getItem(cacheKey);
+        const cacheTime = localStorage.getItem(cacheTimeKey);
+        
+        // Cache for 1 hour
+        const CACHE_DURATION = 60 * 60 * 1000;
+        const now = Date.now();
+        
+        if (cachedData && cacheTime && (now - parseInt(cacheTime)) < CACHE_DURATION) {
+          const cached = JSON.parse(cachedData);
+          setRepos(cached.repos);
+          setLanguages(cached.languages);
+          setLoading(false);
+          return;
+        }
+
+        const response = await fetch('https://api.github.com/users/viguime/repos?sort=updated&per_page=3');
+        
+        // Check for rate limiting
+        if (response.status === 403) {
+          setError('GitHub API rate limit exceeded. Please try again later.');
+          setLoading(false);
+          return;
+        }
+
+        if (!response.ok) {
+          setError('Failed to fetch repositories');
+          setLoading(false);
+          return;
+        }
+
+        const data: Repo[] = await response.json();
         const publicRepos = data.filter(repo => !repo.private).slice(0, 3);
         setRepos(publicRepos);
 
@@ -35,6 +68,7 @@ export function Projects() {
           fetch(repo.languages_url)
             .then(res => res.json())
             .then(langData => ({ id: repo.id, data: langData }))
+            .catch(() => ({ id: repo.id, data: {} }))
         );
 
         const languageResults = await Promise.all(languagePromises);
@@ -43,11 +77,20 @@ export function Projects() {
           languageMap[result.id] = result.data;
         });
         setLanguages(languageMap);
+        
+        // Save to cache
+        localStorage.setItem(cacheKey, JSON.stringify({ repos: publicRepos, languages: languageMap }));
+        localStorage.setItem(cacheTimeKey, now.toString());
+        
         setLoading(false);
-      })
-      .catch(() => {
+      } catch (err) {
+        console.error('Error fetching repos:', err);
+        setError('Failed to load projects');
         setLoading(false);
-      });
+      }
+    };
+
+    fetchRepos();
   }, []);
 
   const getLanguagePercentages = (repoId: number) => {
@@ -76,6 +119,20 @@ export function Projects() {
               </CardHeader>
             </Card>
           ))}
+        </div>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section className="max-w-6xl mx-auto px-4 py-16">
+        <h2 className="text-3xl font-bold mb-8">Recent Projects</h2>
+        <div className="text-center py-12">
+          <p className="text-muted-foreground mb-4">{error}</p>
+          <p className="text-sm text-muted-foreground">
+            Check the browser console for more details.
+          </p>
         </div>
       </section>
     );
