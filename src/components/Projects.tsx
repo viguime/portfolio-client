@@ -22,6 +22,7 @@ export function Projects() {
   const [languages, setLanguages] = useState<{ [key: number]: LanguageData }>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [visibleCards, setVisibleCards] = useState<number[]>([]);
 
   useEffect(() => {
     const fetchRepos = async () => {
@@ -41,6 +42,13 @@ export function Projects() {
           setRepos(cached.repos);
           setLanguages(cached.languages);
           setLoading(false);
+          
+          // Trigger staggered fade-in animation for cached data
+          cached.repos.forEach((_: Repo, index: number) => {
+            setTimeout(() => {
+              setVisibleCards(prev => [...prev, index]);
+            }, 150 + index * 150);
+          });
           return;
         }
 
@@ -83,6 +91,13 @@ export function Projects() {
         localStorage.setItem(cacheTimeKey, now.toString());
         
         setLoading(false);
+        
+        // Trigger staggered fade-in animation
+        publicRepos.forEach((_, index) => {
+          setTimeout(() => {
+            setVisibleCards(prev => [...prev, index]);
+          }, 150 + index * 150);
+        });
       } catch (err) {
         console.error('Error fetching repos:', err);
         setError('Failed to load projects');
@@ -142,15 +157,20 @@ export function Projects() {
     <section className="max-w-6xl mx-auto px-4 py-16">
       <h2 className="text-3xl font-bold mb-8">Recent Projects</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {repos.map(repo => {
+        {repos.map((repo, index) => {
           const langPercentages = getLanguagePercentages(repo.id);
+          const isVisible = visibleCards.includes(index);
           return (
             <a
               key={repo.id}
               href={repo.html_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="block transition-transform hover:scale-105"
+              className="block transition-all duration-500 ease-out hover:scale-105"
+              style={{
+                opacity: isVisible ? 1 : 0,
+                transform: isVisible ? 'translateY(0)' : 'translateY(10px)',
+              }}
             >
               <Card className="h-full">
                 <CardHeader>
