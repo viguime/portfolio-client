@@ -148,7 +148,7 @@ export function AvailabilityDrawer({ open, onOpenChange }: AvailabilityDrawerPro
                     <button
                       key={slot.id}
                       onClick={() => handleSlotSelect(slot.id)}
-                      className="w-full p-4 text-left border rounded-lg hover:bg-accent transition-colors flex items-center gap-3"
+                      className="w-full p-4 text-left border rounded-lg hover:bg-accent transition-colors flex items-center gap-3 cursor-pointer"
                     >
                       <Calendar className="w-5 h-5 text-muted-foreground" />
                       <span>{formatDateTime(slot.datetime)}</span>
@@ -232,11 +232,11 @@ export function AvailabilityDrawer({ open, onOpenChange }: AvailabilityDrawerPro
                     setFormData({ name: '', email: '', message: '' });
                     setErrors({});
                   }}
-                  className="flex-1"
+                  className="flex-1 cursor-pointer"
                 >
                   Back
                 </Button>
-                <Button type="submit" disabled={submitting} className="flex-1">
+                <Button type="submit" disabled={submitting} className="flex-1 cursor-pointer">
                   {submitting ? (
                     <>
                       <Loader2 className="w-4 h-4 mr-2 animate-spin" />
