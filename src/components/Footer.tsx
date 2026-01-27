@@ -1,4 +1,4 @@
-import { Github, Mail } from 'lucide-react';
+import { Github } from 'lucide-react';
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -11,13 +11,6 @@ export function Footer() {
             © {currentYear} All rights reserved
           </p>
           <div className="flex items-center gap-4">
-            <a
-              href="mailto:jvictormguimaraes@gmail.com"
-              className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <Mail className="w-4 h-4" />
-              <span className="hidden sm:inline">Email</span>
-            </a>
             <a
               href="https://github.com/viguime"
               target="_blank"

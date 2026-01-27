@@ -108,7 +108,7 @@ portfolio-client/
    - Hero.tsx: Line 17 - José Victor Meireles Guimarães
    - GitHubReadme.tsx: Line 13 - viguime
    - Projects.tsx: Line 28 - viguime
-   - Footer.tsx: Lines 11, 18 - jvictormguimaraes@gmail.com and github.com/viguime
+   - Footer.tsx: Lines 11, 18 - github.com/viguime
 
 2. **Create GitHub README**:
    - Create repo: `github.com/viguime/portfolio-client`
