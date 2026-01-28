@@ -13,7 +13,7 @@ export function AvailabilitySection() {
         <p className="text-muted-foreground">
           Have a project in mind? Schedule a call to discuss how we can collaborate.
         </p>
-        <Button onClick={() => setDrawerOpen(true)} size="lg" className="gap-2 cursor-pointer" >
+        <Button onClick={() => setDrawerOpen(true)} size="lg" className="gap-2 cursor-pointer border" >
           <Calendar className="w-5 h-5" />
           Schedule a Call
         </Button>
